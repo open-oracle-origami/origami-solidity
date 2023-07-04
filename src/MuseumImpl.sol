@@ -1,4 +1,7 @@
-import "@openzeppelin/Ownable.sol";
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
 contract MuseumImpl is Ownable {
     // Owner is the curator in this contract
