@@ -2,6 +2,7 @@
 pragma solidity ^0.8.21;
 
 import "forge-std/Script.sol";
+import "forge-std/console.sol";
 
 import "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
@@ -26,6 +27,16 @@ contract DeployScriptV1 is Script {
             museumBeacon,
             collectionBeacon
         )));
+
+        console.log("Collection Implementation: %s", collectionImpl);
+        console.log("Collection Beacon: %s", collectionBeacon);
+
+        console.log("Museum Implementation: %s", museumImpl);
+        console.log("Museum Beacon: %s", museumBeacon);
+
+        console.log("Shibuya Implementation: %s", shibuyaImpl);
+        console.log("Shibuya Proxy: %s", shibuyaProxy);
+
         vm.stopBroadcast();
     }
 }
