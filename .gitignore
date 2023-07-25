@@ -10,7 +10,8 @@ out/
 # Docs
 docs/
 
-# Dotenv file
+# Project files
+broadcast/
 .env
 foundry.toml
 deploy.sh

@@ -36,3 +36,10 @@ It is recommended that you understand the Open Oracle Origami project before usi
 
 ## Foundation Deployments
 
+### Tenet Testnet
+Collection Implementation: 0x573051620885dd85E24808911E41cc3FB1f58ab9
+Collection Beacon: 0xFDA5261B95249Ad791A04a93e1C2b0521f386C9c
+Museum Implementation: 0x9b2D6204F6DC6623b53F08Ba813Ec50b57C5bCeb
+Museum Beacon: 0x1b430e574395B8204d7E84c064C29B14B0B5E52c
+Shibuya Implementation: 0xceb3abE1434067C53B371B14B96801d0b8D0e7B7
+Shibuya Proxy: 0x5D2BD667720f3156981780c2e1378f68F6DE3286

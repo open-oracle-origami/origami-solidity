@@ -13,6 +13,7 @@ import "../src/CollectionImplV1.sol";
 
 contract DeployScriptV1 is Script {
     function run() public {
+        vm.startBroadcast();
         address collectionImpl = address(new CollectionImplV1());
         address collectionBeacon = address(new UpgradeableBeacon(collectionImpl));
 
@@ -25,7 +26,6 @@ contract DeployScriptV1 is Script {
             museumBeacon,
             collectionBeacon
         )));
-
-        vm.broadcast();
+        vm.stopBroadcast();
     }
 }
