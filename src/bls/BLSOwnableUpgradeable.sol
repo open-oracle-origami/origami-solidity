@@ -75,4 +75,12 @@ abstract contract BLSOwnableUpgradeable is Initializable, EIP712Upgradeable {
         }
         blsPublicKey = blsPublicKey_;
     }
+
+    function decodeAuthority(bytes memory authorityRaw) internal pure returns (uint256[4] memory) {
+        return abi.decode(authorityRaw, (uint256[4]));
+    }
+
+    function decodeProof(bytes memory proofRaw) internal pure returns (uint256[2] memory) {
+        return abi.decode(proofRaw, (uint256[2]));
+    }
 }

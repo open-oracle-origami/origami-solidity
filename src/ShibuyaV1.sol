@@ -23,7 +23,10 @@ abstract contract ShibuyaV1 is Initializable, UUPSUpgradeable {
         collectionBeacon = _collectionBeacon;
     }
 
-    function _createMuseum(address _museum) public returns (address) {
+    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory authority) internal virtual returns (address);
+
+    function createMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory authority) public returns (address) {
+        address _museum = _deployMuseum(_name, _valuePerBlockFee, authority);
         museums[museumCount] = _museum;
         museumCount += 1;
         emit Museum(_museum);
@@ -31,16 +34,21 @@ abstract contract ShibuyaV1 is Initializable, UUPSUpgradeable {
         return _museum;
     }
 
-    function _updateMuseumBeacon(address _museumBeacon) internal {
+    function _preUpdateMuseum(address _museumBeacon, bytes memory authorityProof) internal virtual;
+
+    function updateMuseumBeacon(address _museumBeacon, bytes memory authorityProof) public {
+        _preUpdateMuseum(_museumBeacon, authorityProof);
         require(_museumBeacon != address(0), "Invalid museum beacon address");
         museumBeacon = _museumBeacon;
         emit UpdateMuseumBeacon(_museumBeacon);
     }
 
-    function _updateCollectionBeacon(address _collectionBeacon) internal {
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) internal virtual;
+
+    function updateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) public {
+        _preUpdateCollectionBeacon(_collectionBeacon, authorityProof);
         require(_collectionBeacon != address(0), "Invalid collection beacon address");
         collectionBeacon = _collectionBeacon;
         emit UpdateCollectionBeacon(_collectionBeacon);
     }
 }
-

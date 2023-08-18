@@ -60,7 +60,10 @@ abstract contract CollectionV1 is Initializable {
 
     function curator() public view virtual returns (address);
 
-    function _curate(int256 _data) internal {
+    function _preCurate(int256 _data, bytes memory authorityProof) internal virtual;
+
+    function curate(int256 _data, bytes memory authorityProof) public {
+        _preCurate(_data, authorityProof);
         origami[counter] = OrigamiItem(_data, block.timestamp);
         counter += 1;
         emit Origami(_data);
@@ -70,14 +73,20 @@ abstract contract CollectionV1 is Initializable {
         return _museums.at(_index);
     }
 
-    function _attachMuseum(address _museum) internal {
+    function _preAttachMuseum(address _museum, bytes memory authorityProof) internal virtual;
+
+    function _attachMuseum(address _museum, bytes memory authorityProof) internal {
+        _preAttachMuseum(_museum, authorityProof);
         require(_museum != address(0), "Invalid museum address");
         require(_museums.length() <= 10, "No more than 10 museums allowed"); // TBD: Decide what this should be
         _museums.add(_museum);
         emit AttachMuseum(_museum);
     }
 
-    function _detachMuseum(address _museum) internal {
+    function _preDetachMuseum(address _museum, bytes memory authorityProof) internal virtual;
+
+    function detachMuseum(address _museum, bytes memory authorityProof) public {
+        _preDetachMuseum(_museum, authorityProof);
         require(_museum != address(0), "Invalid museum address");
         _museums.remove(_museum);
         emit DetachMuseum(_museum);
@@ -87,24 +96,37 @@ abstract contract CollectionV1 is Initializable {
         return _museums.length();
     }
 
-    function _updateName(string memory _name) internal {
+    function _preUpdateName(string memory _name, bytes memory authorityProof) internal virtual;
+
+    function updateName(string memory _name, bytes memory authorityProof) public {
+        _preUpdateName(_name, authorityProof);
         name = _name;
         emit UpdateName(_name);
     }
 
-    function _updateDecimals(uint8 _decimals) internal {
+    function _preUpdateDecimals(uint8 _decimals, bytes memory authorityProof) internal virtual;
+
+    function updateDecimals(uint8 _decimals, bytes memory authorityProof) public {
+        _preUpdateDecimals(_decimals, authorityProof);
         decimals = _decimals;
         emit UpdateDecimals(_decimals);
     }
 
-    function _updateVersion(uint256 _version) internal {
+    function _preUpdateVersion(uint256 _version, bytes memory authorityProof) internal virtual;
+
+    function updateVersion(uint256 _version, bytes memory authorityProof) public {
+        _preUpdateVersion(_version, authorityProof);
         version = _version;
         emit UpdateVersion(_version);
     }
 
-    function requireVisitor() internal virtual view;
+    function _owner() internal virtual view returns (address);
 
-    function _requireVisitor() internal view {
+    function requireVisitor() internal view {
+        if (msg.sender == _owner()) {
+            return;
+        }
+
         bool found = false;
         for (uint256 i = 0; i < _museums.length(); i++) {
             if (IVisitable(_museums.at(i)).hasVisitor(msg.sender)) {

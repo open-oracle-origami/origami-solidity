@@ -21,14 +21,17 @@ contract MuseumBLSImplV1 is Initializable, BLSOwnableUpgradeable, MuseumV1 {
         __MuseumV1_init(_collectionBeacon, _name, _valuePerBlockFee);
     }
 
-    function createCollection(string memory _name, uint8 _decimals, uint256 _version, uint256[2] memory blsSignature) public returns (address) {
+    function _preDeployCollection(string memory _name, uint8 _decimals, uint256 _version, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_CREATE_COLLECTION,
             _name,
             _decimals,
             _version
         ));
-        requireMessageVerified(digest, blsSignature);
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
+    }
+
+    function _deployCollection(string memory _name, uint8 _decimals, uint256 _version) internal override returns (address) {
         address _collection = address(new BeaconProxy(collectionBeacon, abi.encodeWithSignature(
             "initialize(address,uint256[4],string,uint8,uint256)",
             address(this),
@@ -37,70 +40,64 @@ contract MuseumBLSImplV1 is Initializable, BLSOwnableUpgradeable, MuseumV1 {
             _decimals,
             _version
         )));
-        return _createCollection(_collection); 
+        return _collection;
     }
 
-    function attachCollection(address _collection, uint256[2] memory blsSignature) public {
+    function _preAttachCollection(address _collection, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_ATTACH_COLLECTION,
             _collection
         ));
-        requireMessageVerified(digest, blsSignature);
-        _attachCollection(_collection);
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function detachCollection(uint256 _index, uint256[2] memory blsSignature) public {
+    function _preDetachCollection(uint256 _index, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_DETACH_COLLECTION,
             _index
         ));
-        requireMessageVerified(digest, blsSignature);
-        _detachCollection(_index); 
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function withdraw(address _to, uint256 _amount, uint256[2] memory blsSignature) public {
+    function _preWithdraw(address _to, uint256 _amount, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_WITHDRAW,
             _to,
             _amount
         ));
-        requireMessageVerified(digest, blsSignature);
-        _withdraw(_to, _amount); 
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function hasVisitor(address _visitor) public view override returns (bool) {
-        return _hasVisitor(address(0), _visitor); 
+    function _owner() internal pure override returns (address) {
+        return address(0);
     }
 
     function curator() public pure override returns (address) {
         return address(0);
     }
 
-    function updateName(string memory _name, uint256[2] memory blsSignature) public {
+    function _preUpdateName(string memory _name, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_NAME,
             _name
         ));
-        requireMessageVerified(digest, blsSignature);
-        _updateName(_name); 
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function updateValuePerBlockFee(uint256 _valuePerBlockFee, uint256[2] memory blsSignature) public {
+    function _preUpdateValuePerBlockFee(uint256 _valuePerBlockFee, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_VALUE_PER_BLOCK_FEE,
             _valuePerBlockFee
         ));
-        requireMessageVerified(digest, blsSignature);
-        _updateValuePerBlockFee(_valuePerBlockFee);
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function updateCollectionBeacon(address _collectionBeacon, uint256[2] memory blsSignature) public {
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory blsSignatureRaw) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_COLLECTION_BEACON,
             _collectionBeacon
         ));
-        requireMessageVerified(digest, blsSignature);
-        _updateCollectionBeacon(_collectionBeacon);
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
 }

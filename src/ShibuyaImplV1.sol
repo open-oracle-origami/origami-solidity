@@ -12,7 +12,7 @@ contract ShibuyaImplV1 is Initializable, ShibuyaV1, OwnableUpgradeable {
         __ShibuyaV1_init(_museumBeacon, _collectionBeacon); 
     }
 
-    function createMuseum(string memory _name, uint256 _valuePerBlockFee) public returns (address) {
+    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory) internal override returns (address) {
         address _museum = address(new BeaconProxy(museumBeacon, abi.encodeWithSignature(
             "initialize(address,address,string,uint256)",
             collectionBeacon,
@@ -20,16 +20,12 @@ contract ShibuyaImplV1 is Initializable, ShibuyaV1, OwnableUpgradeable {
             _name,
             _valuePerBlockFee
         )));
-        return _createMuseum(_museum);
+        return _museum;
     }
 
-    function updateMuseumBeacon(address _museumBeacon) public onlyOwner {
-        _updateMuseumBeacon(_museumBeacon); 
-    }
+    function _preUpdateMuseum(address _museumBeacon, bytes memory) internal override view onlyOwner {}
 
-    function updateCollectionBeacon(address _collectionBeacon) public onlyOwner {
-        _updateCollectionBeacon(_collectionBeacon); 
-    }
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory) internal override view onlyOwner {}
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
 }

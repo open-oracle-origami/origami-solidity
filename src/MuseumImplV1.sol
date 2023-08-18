@@ -14,7 +14,9 @@ contract MuseumImplV1 is Initializable, OwnableUpgradeable, MuseumV1 {
         _transferOwnership(_curator);
     }
 
-    function createCollection(string memory _name, uint8 _decimals, uint256 _version) public onlyOwner returns (address) {
+    function _preDeployCollection(string memory, uint8, uint256, bytes memory) internal override view onlyOwner {}
+
+    function _deployCollection(string memory _name, uint8 _decimals, uint256 _version) internal override returns (address) {
         address _collection = address(new BeaconProxy(collectionBeacon, abi.encodeWithSignature(
             "initialize(address,address,string,uint8,uint256)",
             address(this),
@@ -23,39 +25,27 @@ contract MuseumImplV1 is Initializable, OwnableUpgradeable, MuseumV1 {
             _decimals,
             _version
         )));
-        return _createCollection(_collection);
+        return _collection;
     }
 
-    function attachCollection(address _collection) public onlyOwner {
-        _attachCollection(_collection);
-    }
+    function _preAttachCollection(address, bytes memory) internal override view onlyOwner {}
 
-    function detachCollection(uint256 _index) public onlyOwner {
-        _detachCollection(_index); 
-    }
+    function _preDetachCollection(uint256, bytes memory) internal override view onlyOwner {}
 
-    function withdraw(address _to, uint256 _amount) public onlyOwner {
-        _withdraw(_to, _amount); 
-    }
+    function _preWithdraw(address, uint256, bytes memory) internal override view onlyOwner {}
 
-    function hasVisitor(address _visitor) public view returns (bool) {
-        return _hasVisitor(owner(), _visitor); 
+    function _owner() internal override view returns (address) {
+        return owner();
     }
 
     function curator() public view override returns (address) {
         return owner();
     }
 
-    function updateName(string memory _name) public onlyOwner {
-        _updateName(_name); 
-    }
+    function _preUpdateName(string memory, bytes memory) internal override view onlyOwner {}
 
-    function updateValuePerBlockFee(uint256 _valuePerBlockFee) public onlyOwner {
-        _updateValuePerBlockFee(_valuePerBlockFee);
-    }
+    function _preUpdateValuePerBlockFee(uint256, bytes memory) internal override view onlyOwner {}
 
-    function updateCollectionBeacon(address _collectionBeacon) public onlyOwner {
-        _updateCollectionBeacon(_collectionBeacon);
-    }
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory) internal override view onlyOwner {}
 
 }

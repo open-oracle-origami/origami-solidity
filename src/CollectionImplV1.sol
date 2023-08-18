@@ -19,33 +19,19 @@ contract CollectionImplV1 is Initializable, OwnableUpgradeable, CollectionV1 {
         return owner();
     }
 
-    function curate(int256 _data) public onlyOwner {
-        _curate(_data); 
-    }
+    function _preCurate(int256, bytes memory) internal override view onlyOwner {}
 
-    function attachMuseum(address _museum) public onlyOwner {
-        _attachMuseum(_museum); 
-    }
+    function _preAttachMuseum(address, bytes memory) internal override view onlyOwner {}
 
-    function detachMuseum(address _museum) public onlyOwner {
-        _detachMuseum(_museum);
-    }
+    function _preDetachMuseum(address, bytes memory) internal override view onlyOwner {}
 
-    function updateName(string memory _name) public onlyOwner {
-        _updateName(_name);
-    }
+    function _preUpdateName(string memory, bytes memory) internal override view onlyOwner {}
 
-    function updateDecimals(uint8 _decimals) public onlyOwner {
-        _updateDecimals(_decimals);
-    }
+    function _preUpdateDecimals(uint8, bytes memory) internal override view onlyOwner {}
 
-    function updateVersion(uint256 _version) public onlyOwner {
-        _updateVersion(_version);
-    }
+    function _preUpdateVersion(uint256, bytes memory) internal override view onlyOwner {}
 
-    function requireVisitor() internal view override {
-        if (msg.sender != owner()) {
-            _requireVisitor(); 
-        }
+    function _owner() internal view override returns (address) {
+        return owner();
     }
 }

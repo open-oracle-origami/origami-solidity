@@ -17,33 +17,32 @@ contract ShibuyaBLSImplV1 is Initializable, ShibuyaV1, BLSOwnableUpgradeable {
         __ShibuyaV1_init(_museumBeacon, _collectionBeacon); 
     }
 
-    function createMuseum(string memory _name, uint256 _valuePerBlockFee, uint256[4] memory blsPublicKey_) public returns (address) {
+    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory blsPublicKeyRaw) internal override returns (address) {
         address _museum = address(new BeaconProxy(museumBeacon, abi.encodeWithSignature(
             "initialize(address,uint256[4],string,uint256)",
             collectionBeacon,
-            blsPublicKey_,
+            decodeAuthority(blsPublicKeyRaw),
             _name,
             _valuePerBlockFee
         )));
-        return _createMuseum(_museum);
+
+        return _museum;
     }
 
-    function updateMuseumBeacon(address _museumBeacon, uint256[2] memory blsSignature) public  {
+    function _preUpdateMuseum(address _museumBeacon, bytes memory blsSignatureRaw) internal override view  {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_MUSEUM_BEACON,
             _museumBeacon
         ));
-        requireMessageVerified(digest, blsSignature);
-        _updateMuseumBeacon(_museumBeacon); 
+        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
     }
 
-    function updateCollectionBeacon(address _collectionBeacon, uint256[2] memory blsSignature) public {
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory blsSignature) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_COLLECTION_BEACON,
             _collectionBeacon
         ));
-        requireMessageVerified(digest, blsSignature);
-        _updateCollectionBeacon(_collectionBeacon); 
+        requireMessageVerified(digest, decodeProof(blsSignature));
     }
 
     function upgradeTo(address newImplementation, uint256[2] memory blsSignature) public onlyProxy {
