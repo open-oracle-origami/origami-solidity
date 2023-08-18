@@ -22,12 +22,12 @@ contract UpgradeableBeaconBLS is IBeacon, BLSOwnableUpgradeable {
         return _implementation;
     }
 
-    function upgradeTo(address newImplementation, uint256[2] memory blsSignature) public {
+    function upgradeTo(address newImplementation, uint256[2] memory _blsSignature) public {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPGRADE_TO,
             newImplementation
         ));
-        requireMessageVerified(digest, blsSignature);
+        requireMessageVerified(digest, _blsSignature);
         _setImplementation(newImplementation);
         emit Upgraded(newImplementation);
     }

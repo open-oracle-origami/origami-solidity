@@ -23,10 +23,10 @@ abstract contract ShibuyaV1 is Initializable, UUPSUpgradeable {
         collectionBeacon = _collectionBeacon;
     }
 
-    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory authority) internal virtual returns (address);
+    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory _authority) internal virtual returns (address);
 
-    function createMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory authority) public returns (address) {
-        address _museum = _deployMuseum(_name, _valuePerBlockFee, authority);
+    function createMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory _authority) public returns (address) {
+        address _museum = _deployMuseum(_name, _valuePerBlockFee, _authority);
         museums[museumCount] = _museum;
         museumCount += 1;
         emit Museum(_museum);
@@ -34,19 +34,19 @@ abstract contract ShibuyaV1 is Initializable, UUPSUpgradeable {
         return _museum;
     }
 
-    function _preUpdateMuseum(address _museumBeacon, bytes memory authorityProof) internal virtual;
+    function _preUpdateMuseum(address _museumBeacon, bytes memory _authorityProof) internal virtual;
 
-    function updateMuseumBeacon(address _museumBeacon, bytes memory authorityProof) public {
-        _preUpdateMuseum(_museumBeacon, authorityProof);
+    function updateMuseumBeacon(address _museumBeacon, bytes memory _authorityProof) public {
+        _preUpdateMuseum(_museumBeacon, _authorityProof);
         require(_museumBeacon != address(0), "Invalid museum beacon address");
         museumBeacon = _museumBeacon;
         emit UpdateMuseumBeacon(_museumBeacon);
     }
 
-    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) internal virtual;
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory _authorityProof) internal virtual;
 
-    function updateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) public {
-        _preUpdateCollectionBeacon(_collectionBeacon, authorityProof);
+    function updateCollectionBeacon(address _collectionBeacon, bytes memory _authorityProof) public {
+        _preUpdateCollectionBeacon(_collectionBeacon, _authorityProof);
         require(_collectionBeacon != address(0), "Invalid collection beacon address");
         collectionBeacon = _collectionBeacon;
         emit UpdateCollectionBeacon(_collectionBeacon);

@@ -50,12 +50,12 @@ abstract contract MuseumV1 is Initializable, IVisitable {
         subscriptionCount = 1;
     }
 
-    function _preDeployCollection(string memory _name, uint8 _decimals, uint256 _version, bytes memory authorityProof) internal virtual;
+    function _preDeployCollection(string memory _name, uint8 _decimals, uint256 _version, bytes memory _authorityProof) internal virtual;
 
     function _deployCollection(string memory _name, uint8 _decimals, uint256 _version) internal virtual returns (address);
 
-    function createCollection(string memory _name, uint8 _decimals, uint256 _version, bytes memory authorityProof) public returns (address) {
-        _preDeployCollection(_name, _decimals, _version, authorityProof);
+    function createCollection(string memory _name, uint8 _decimals, uint256 _version, bytes memory _authorityProof) public returns (address) {
+        _preDeployCollection(_name, _decimals, _version, _authorityProof);
         address _collection = _deployCollection(_name, _decimals, _version);
         emit Collection(_collection);
         _attachCollection(_collection);
@@ -63,7 +63,7 @@ abstract contract MuseumV1 is Initializable, IVisitable {
         return _collection;
     }
 
-    function _preAttachCollection(address _collection, bytes memory authorityProof) internal virtual;
+    function _preAttachCollection(address _collection, bytes memory _authorityProof) internal virtual;
 
     function _attachCollection(address _collection) internal {
         require(_collection != address(0), "Invalid collection address");
@@ -72,15 +72,15 @@ abstract contract MuseumV1 is Initializable, IVisitable {
         emit AttachCollection(collectionCount - 1, _collection);
     }
 
-    function attachCollection(address _collection, bytes memory authorityProof) public {
-        _preAttachCollection(_collection, authorityProof);
+    function attachCollection(address _collection, bytes memory _authorityProof) public {
+        _preAttachCollection(_collection, _authorityProof);
         _attachCollection(_collection);
     }
 
-    function _preDetachCollection(uint256 _index, bytes memory authorityProof) internal virtual;
+    function _preDetachCollection(uint256 _index, bytes memory _authorityProof) internal virtual;
 
-    function detachCollection(uint256 _index, bytes memory authorityProof) public {
-        _preDetachCollection(_index, authorityProof);
+    function detachCollection(uint256 _index, bytes memory _authorityProof) public {
+        _preDetachCollection(_index, _authorityProof);
         require(collections[_index] != address(0), "Invalid collection address");
         delete collections[_index];
         emit DetachCollection(_index);
@@ -116,10 +116,10 @@ abstract contract MuseumV1 is Initializable, IVisitable {
         emit Extend(_index, _subscriptions[_index].block, msg.sender);
     }
 
-    function _preWithdraw(address _to, uint256 _amount, bytes memory authorityProof) internal virtual;
+    function _preWithdraw(address _to, uint256 _amount, bytes memory _authorityProof) internal virtual;
 
-    function withdraw(address _to, uint256 _amount, bytes memory authorityProof) public {
-        _preWithdraw(_to, _amount, authorityProof);
+    function withdraw(address _to, uint256 _amount, bytes memory _authorityProof) public {
+        _preWithdraw(_to, _amount, _authorityProof);
         require(address(this).balance >= _amount, "Insufficient balance");
         payable(_to).transfer(_amount);
         emit Withdraw(_to, _amount);
@@ -165,26 +165,26 @@ abstract contract MuseumV1 is Initializable, IVisitable {
 
     function curator() public view virtual returns (address);
 
-    function _preUpdateName(string memory _name, bytes memory authorityProof) internal virtual;
+    function _preUpdateName(string memory _name, bytes memory _authorityProof) internal virtual;
 
-    function updateName(string memory _name, bytes memory authorityProof) public {
-        _preUpdateName(_name, authorityProof);
+    function updateName(string memory _name, bytes memory _authorityProof) public {
+        _preUpdateName(_name, _authorityProof);
         name = _name;
         emit UpdateName(_name);
     }
 
-    function _preUpdateValuePerBlockFee(uint256 _valuePerBlockFee, bytes memory authorityProof) internal virtual;
+    function _preUpdateValuePerBlockFee(uint256 _valuePerBlockFee, bytes memory _authorityProof) internal virtual;
 
-    function updateValuePerBlockFee(uint256 _valuePerBlockFee, bytes memory authorityProof) public {
-        _preUpdateValuePerBlockFee(_valuePerBlockFee, authorityProof);
+    function updateValuePerBlockFee(uint256 _valuePerBlockFee, bytes memory _authorityProof) public {
+        _preUpdateValuePerBlockFee(_valuePerBlockFee, _authorityProof);
         valuePerBlockFee = _valuePerBlockFee;
         emit UpdateValuePerBlockFee(_valuePerBlockFee);
     }
 
-    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) internal virtual;
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory _authorityProof) internal virtual;
 
-    function updateCollectionBeacon(address _collectionBeacon, bytes memory authorityProof) public {
-        _preUpdateCollectionBeacon(_collectionBeacon, authorityProof);
+    function updateCollectionBeacon(address _collectionBeacon, bytes memory _authorityProof) public {
+        _preUpdateCollectionBeacon(_collectionBeacon, _authorityProof);
         require(_collectionBeacon != address(0), "Invalid collection beacon address");
         collectionBeacon = _collectionBeacon;
         emit UpdateCollectionBeacon(_collectionBeacon);

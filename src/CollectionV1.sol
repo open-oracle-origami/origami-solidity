@@ -60,10 +60,10 @@ abstract contract CollectionV1 is Initializable {
 
     function curator() public view virtual returns (address);
 
-    function _preCurate(int256 _data, bytes memory authorityProof) internal virtual;
+    function _preCurate(int256 _data, bytes memory _authorityProof) internal virtual;
 
-    function curate(int256 _data, bytes memory authorityProof) public {
-        _preCurate(_data, authorityProof);
+    function curate(int256 _data, bytes memory _authorityProof) public {
+        _preCurate(_data, _authorityProof);
         origami[counter] = OrigamiItem(_data, block.timestamp);
         counter += 1;
         emit Origami(_data);
@@ -73,20 +73,20 @@ abstract contract CollectionV1 is Initializable {
         return _museums.at(_index);
     }
 
-    function _preAttachMuseum(address _museum, bytes memory authorityProof) internal virtual;
+    function _preAttachMuseum(address _museum, bytes memory _authorityProof) internal virtual;
 
-    function _attachMuseum(address _museum, bytes memory authorityProof) internal {
-        _preAttachMuseum(_museum, authorityProof);
+    function _attachMuseum(address _museum, bytes memory _authorityProof) internal {
+        _preAttachMuseum(_museum, _authorityProof);
         require(_museum != address(0), "Invalid museum address");
         require(_museums.length() <= 10, "No more than 10 museums allowed"); // TBD: Decide what this should be
         _museums.add(_museum);
         emit AttachMuseum(_museum);
     }
 
-    function _preDetachMuseum(address _museum, bytes memory authorityProof) internal virtual;
+    function _preDetachMuseum(address _museum, bytes memory _authorityProof) internal virtual;
 
-    function detachMuseum(address _museum, bytes memory authorityProof) public {
-        _preDetachMuseum(_museum, authorityProof);
+    function detachMuseum(address _museum, bytes memory _authorityProof) public {
+        _preDetachMuseum(_museum, _authorityProof);
         require(_museum != address(0), "Invalid museum address");
         _museums.remove(_museum);
         emit DetachMuseum(_museum);
@@ -96,26 +96,26 @@ abstract contract CollectionV1 is Initializable {
         return _museums.length();
     }
 
-    function _preUpdateName(string memory _name, bytes memory authorityProof) internal virtual;
+    function _preUpdateName(string memory _name, bytes memory _authorityProof) internal virtual;
 
-    function updateName(string memory _name, bytes memory authorityProof) public {
-        _preUpdateName(_name, authorityProof);
+    function updateName(string memory _name, bytes memory _authorityProof) public {
+        _preUpdateName(_name, _authorityProof);
         name = _name;
         emit UpdateName(_name);
     }
 
-    function _preUpdateDecimals(uint8 _decimals, bytes memory authorityProof) internal virtual;
+    function _preUpdateDecimals(uint8 _decimals, bytes memory _authorityProof) internal virtual;
 
-    function updateDecimals(uint8 _decimals, bytes memory authorityProof) public {
-        _preUpdateDecimals(_decimals, authorityProof);
+    function updateDecimals(uint8 _decimals, bytes memory _authorityProof) public {
+        _preUpdateDecimals(_decimals, _authorityProof);
         decimals = _decimals;
         emit UpdateDecimals(_decimals);
     }
 
-    function _preUpdateVersion(uint256 _version, bytes memory authorityProof) internal virtual;
+    function _preUpdateVersion(uint256 _version, bytes memory _authorityProof) internal virtual;
 
-    function updateVersion(uint256 _version, bytes memory authorityProof) public {
-        _preUpdateVersion(_version, authorityProof);
+    function updateVersion(uint256 _version, bytes memory _authorityProof) public {
+        _preUpdateVersion(_version, _authorityProof);
         version = _version;
         emit UpdateVersion(_version);
     }

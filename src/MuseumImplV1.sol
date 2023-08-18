@@ -46,6 +46,6 @@ contract MuseumImplV1 is Initializable, OwnableUpgradeable, MuseumV1 {
 
     function _preUpdateValuePerBlockFee(uint256, bytes memory) internal override view onlyOwner {}
 
-    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory) internal override view onlyOwner {}
+    function _preUpdateCollectionBeacon(address, bytes memory) internal override view onlyOwner {}
 
 }

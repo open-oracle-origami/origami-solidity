@@ -23,9 +23,9 @@ contract ShibuyaImplV1 is Initializable, ShibuyaV1, OwnableUpgradeable {
         return _museum;
     }
 
-    function _preUpdateMuseum(address _museumBeacon, bytes memory) internal override view onlyOwner {}
+    function _preUpdateMuseum(address, bytes memory) internal override view onlyOwner {}
 
-    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory) internal override view onlyOwner {}
+    function _preUpdateCollectionBeacon(address, bytes memory) internal override view onlyOwner {}
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
 }

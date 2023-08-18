@@ -12,16 +12,16 @@ contract ShibuyaBLSImplV1 is Initializable, ShibuyaV1, BLSOwnableUpgradeable {
     bytes32 constant public EIP712_UPGRADE_TO = keccak256("UpgradeTo(address newImplementation)");
     bytes32 constant public EIP712_UPGRADE_TO_AND_CALL = keccak256("UpgradeToAndCall(address newImplementation,bytes data)");
 
-    function initialize(address _museumBeacon, address _collectionBeacon, uint256[4] memory blsPublicKey_) initializer public {
-        __BLSOwnable_init("ShibuyaBLS", "v1", blsPublicKey_);
+    function initialize(address _museumBeacon, address _collectionBeacon, uint256[4] memory _blsPublicKey) initializer public {
+        __BLSOwnable_init("ShibuyaBLS", "v1", _blsPublicKey);
         __ShibuyaV1_init(_museumBeacon, _collectionBeacon); 
     }
 
-    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory blsPublicKeyRaw) internal override returns (address) {
+    function _deployMuseum(string memory _name, uint256 _valuePerBlockFee, bytes memory _blsPublicKeyRaw) internal override returns (address) {
         address _museum = address(new BeaconProxy(museumBeacon, abi.encodeWithSignature(
             "initialize(address,uint256[4],string,uint256)",
             collectionBeacon,
-            decodeAuthority(blsPublicKeyRaw),
+            decodeAuthority(_blsPublicKeyRaw),
             _name,
             _valuePerBlockFee
         )));
@@ -29,38 +29,38 @@ contract ShibuyaBLSImplV1 is Initializable, ShibuyaV1, BLSOwnableUpgradeable {
         return _museum;
     }
 
-    function _preUpdateMuseum(address _museumBeacon, bytes memory blsSignatureRaw) internal override view  {
+    function _preUpdateMuseum(address _museumBeacon, bytes memory _blsSignatureRaw) internal override view  {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_MUSEUM_BEACON,
             _museumBeacon
         ));
-        requireMessageVerified(digest, decodeProof(blsSignatureRaw));
+        requireMessageVerified(digest, decodeProof(_blsSignatureRaw));
     }
 
-    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory blsSignature) internal override view {
+    function _preUpdateCollectionBeacon(address _collectionBeacon, bytes memory _blsSignature) internal override view {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPDATE_COLLECTION_BEACON,
             _collectionBeacon
         ));
-        requireMessageVerified(digest, decodeProof(blsSignature));
+        requireMessageVerified(digest, decodeProof(_blsSignature));
     }
 
-    function upgradeTo(address newImplementation, uint256[2] memory blsSignature) public onlyProxy {
+    function upgradeTo(address newImplementation, uint256[2] memory _blsSignature) public onlyProxy {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPGRADE_TO,
             newImplementation
         ));
-        requireMessageVerified(digest, blsSignature);
+        requireMessageVerified(digest, _blsSignature);
         _upgradeToAndCallUUPS(newImplementation, new bytes(0), false);
     }
 
-    function upgradeToAndCall(address newImplementation, bytes memory data, uint256[2] memory blsSignature) public onlyProxy {
+    function upgradeToAndCall(address newImplementation, bytes memory data, uint256[2] memory _blsSignature) public onlyProxy {
         bytes32 digest = keccak256(abi.encode(
             EIP712_UPGRADE_TO_AND_CALL,
             newImplementation,
             data
         ));
-        requireMessageVerified(digest, blsSignature);
+        requireMessageVerified(digest, _blsSignature);
         _upgradeToAndCallUUPS(newImplementation, data, true);
     }
 

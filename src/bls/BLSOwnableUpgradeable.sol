@@ -14,33 +14,33 @@ abstract contract BLSOwnableUpgradeable is Initializable, EIP712Upgradeable {
     error InvalidSignature(bytes32 message, uint256[2] signature);
 
     // solhint-disable-next-line func-name-mixedcase
-    function __BLSOwnable_init(string memory eip712Name, string memory eip712Version, uint256[4] memory blsPublicKey_) internal onlyInitializing {
+    function __BLSOwnable_init(string memory eip712Name, string memory eip712Version, uint256[4] memory _blsPublicKey) internal onlyInitializing {
         __EIP712_init(eip712Name, eip712Version);
-        _transferOwnership(blsPublicKey_);
+        _transferOwnership(_blsPublicKey);
     }
 
     /**
     * @dev Transfer ownership of the contract to a new bls public key
-    * @param blsPublicKey_ The new owner bls public key
-    * @param blsSignature The BLS signature, signed by the old public key
+    * @param _blsPublicKey The new owner bls public key
+    * @param _blsSignature The BLS signature, signed by the old public key
     *
     * The following message must be signed:
     * `keccak256(abi.encode(EIP712_TRANSFER_OWNER, blsPublicKey_))`
     */
-    function transferOwnership(uint256[4] memory blsPublicKey_, uint256[2] memory blsSignature) public virtual {
+    function transferOwnership(uint256[4] memory _blsPublicKey, uint256[2] memory _blsSignature) public virtual {
         bytes32 digest = keccak256(abi.encode(
             EIP712_TRANSFER_OWNER,
-            blsPublicKey_
+            _blsPublicKey
         ));
-        requireMessageVerified(digest, blsSignature); 
-        _transferOwnership(blsPublicKey_);
+        requireMessageVerified(digest, _blsSignature); 
+        _transferOwnership(_blsPublicKey);
     }
 
     /**
     * @dev Verifies that the message was signed by the owner bls public key
     * @dev Throws if the message is not signed by the owner bls public key
     * @param messageDigest The message digest
-    * @param blsSignature The BLS signature
+    * @param _blsSignature The BLS signature
     *
     * It is recommended to hash the message in the following way:
     * ```solidity
@@ -50,15 +50,15 @@ abstract contract BLSOwnableUpgradeable is Initializable, EIP712Upgradeable {
     * ));
     * ```
     */
-    function requireMessageVerified(bytes32 messageDigest, uint256[2] memory blsSignature) public virtual view {
+    function requireMessageVerified(bytes32 messageDigest, uint256[2] memory _blsSignature) public virtual view {
         uint256[2] memory point = BLS.hashToPoint(blsDomain(), bytes.concat(messageDigest));
         (bool spCheck, bool sigCheck) = BLS.verifySingle(
-            blsSignature,
+            _blsSignature,
             blsPublicKey,
             point
         );
         if (!spCheck || !sigCheck) {
-            revert InvalidSignature(messageDigest, blsSignature);
+            revert InvalidSignature(messageDigest, _blsSignature);
         }
     }
 
@@ -69,18 +69,18 @@ abstract contract BLSOwnableUpgradeable is Initializable, EIP712Upgradeable {
         return _domainSeparatorV4();
     }
 
-    function _transferOwnership(uint256[4] memory blsPublicKey_) internal {
-        if (!BLS.isOnCurveG2(blsPublicKey_)) {
-            revert InvalidPublicKey(blsPublicKey_);
+    function _transferOwnership(uint256[4] memory _blsPublicKey) internal {
+        if (!BLS.isOnCurveG2(_blsPublicKey)) {
+            revert InvalidPublicKey(_blsPublicKey);
         }
-        blsPublicKey = blsPublicKey_;
+        blsPublicKey = _blsPublicKey;
     }
 
-    function decodeAuthority(bytes memory authorityRaw) internal pure returns (uint256[4] memory) {
-        return abi.decode(authorityRaw, (uint256[4]));
+    function decodeAuthority(bytes memory _authorityRaw) internal pure returns (uint256[4] memory) {
+        return abi.decode(_authorityRaw, (uint256[4]));
     }
 
-    function decodeProof(bytes memory proofRaw) internal pure returns (uint256[2] memory) {
-        return abi.decode(proofRaw, (uint256[2]));
+    function decodeProof(bytes memory _proofRaw) internal pure returns (uint256[2] memory) {
+        return abi.decode(_proofRaw, (uint256[2]));
     }
 }
