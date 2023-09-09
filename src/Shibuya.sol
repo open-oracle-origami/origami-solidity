@@ -2,7 +2,6 @@
     Create3
     Encode/Decode Origami Data
     Meta Transactions
-    Fix init to be like openzeppelin chained and unchained
 
     Better structure to use library for origami verification vs contract ownership
     BLS, Standard ACL and Single Owner for origami verification
@@ -17,7 +16,6 @@ pragma solidity ^0.8.21;
 contract Shibuya {
     uint256 public museumCount;
     mapping(uint256 => address) public museums;
-
     event Museum(address indexed _museum);
 
     constructor(address _museumImpl, address _collectionImpl) {
