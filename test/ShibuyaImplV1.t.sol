@@ -7,9 +7,9 @@ import "forge-std/console.sol";
 import "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
 
-import "../src/ShibuyaImplV1.sol";
-import "../src/MuseumImplV1.sol";
-import "../src/CollectionImplV1.sol";
+import "../src/V1Alpha/ShibuyaImplV1.sol";
+import "../src/V1Alpha/MuseumImplV1.sol";
+import "../src/V1Alpha/CollectionImplV1.sol";
 
 contract TestShibuyaImplV1 is Test {
     ShibuyaImplV1 shibuya;

@@ -6,8 +6,8 @@ import "forge-std/console.sol";
 
 import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
 
-import "../src/MuseumImplV1.sol";
-import "../src/CollectionImplV1.sol";
+import "../src/V1Alpha/MuseumImplV1.sol";
+import "../src/V1Alpha/CollectionImplV1.sol";
 
 contract TestMuseumImplV1 is Test {
     MuseumImplV1 museum;

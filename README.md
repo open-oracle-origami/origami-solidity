@@ -14,6 +14,8 @@ Open Oracle Origami is a versatile open oracle project that facilitates the rapi
 
 As an Origami Curator, you have the flexibility to monetize your data by charging a subscription fee for access or offer your museums as public goods for free visitation. This ecosystem allows curators to participate in an open marketplace to profit from their data, while visitors can easily access curated data for their DApp development needs.
 
+>New docs coming soon, current docs are outdated, please refer to the code for most up to date usage.
+
 ## Contract Summary
 
 ### ShibuyaImplV1
