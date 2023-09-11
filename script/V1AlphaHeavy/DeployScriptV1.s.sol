@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+/*
 pragma solidity ^0.8.21;
 
 import "forge-std/Script.sol";
@@ -7,9 +8,9 @@ import "forge-std/console.sol";
 import "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
 
-import "../src/V1Alpha/ShibuyaImplV1.sol";
-import "../src/V1Alpha/MuseumImplV1.sol";
-import "../src/V1Alpha/CollectionImplV1.sol";
+import "../../src/V1AlphaHeavy/ShibuyaImplV1.sol";
+import "../../src/V1AlphaHeavy/MuseumImplV1.sol";
+import "../../src/V1AlphaHeavy/CollectionImplV1.sol";
 
 
 contract DeployScriptV1 is Script {
@@ -40,3 +41,4 @@ contract DeployScriptV1 is Script {
         vm.stopBroadcast();
     }
 }
+*/

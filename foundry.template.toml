@@ -6,3 +6,9 @@ out = "out"
 libs = ["lib"]
 
 solc = "0.8.21"
+
+remappings = [
+    "@solady/=lib/solady/src",
+    "@zeppelin/=lib/openzeppelin-contracts/contracts",
+    "@upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts",
+]

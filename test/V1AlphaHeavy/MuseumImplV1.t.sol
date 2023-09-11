@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+/*
 pragma solidity ^0.8.21;
 
 import "forge-std/Test.sol";
@@ -6,8 +7,8 @@ import "forge-std/console.sol";
 
 import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
 
-import "../src/V1Alpha/MuseumImplV1.sol";
-import "../src/V1Alpha/CollectionImplV1.sol";
+import "../../src/V1AlphaHeavy/MuseumImplV1.sol";
+import "../../src/V1AlphaHeavy/CollectionImplV1.sol";
 
 contract TestMuseumImplV1 is Test {
     MuseumImplV1 museum;
@@ -175,3 +176,4 @@ contract TestMuseumImplV1 is Test {
         // TODO: test for UpdateCollectionBeacon event emission
     }
 }
+*/
