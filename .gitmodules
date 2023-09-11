@@ -10,3 +10,6 @@
 [submodule "lib/solady"]
 	path = lib/solady
 	url = https://github.com/vectorized/solady
+[submodule "lib/create3"]
+	path = lib/create3
+	url = https://github.com/0xsequence/create3
