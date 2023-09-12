@@ -64,7 +64,7 @@ contract PrimaryArrangement is Script {
         Collection ethbtc = Collection(museum.createCollection("ETH-BTC", 8, 1, "(int256)", true));
         int256 btcusdPrice = 2509757000000;
         int256 ethusdPrice = 154270000000;
-        int256 ethbtcPrice = 6144500;
+        int256 ethbtcPrice = 61445000;
         btcusd.curate(1, abi.encode(btcusdPrice));
         ethusd.curate(1, abi.encode(ethusdPrice));
         ethbtc.curate(1, abi.encode(ethbtcPrice));
