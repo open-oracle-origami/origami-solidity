@@ -4,44 +4,34 @@ pragma solidity ^0.8.21;
 import "forge-std/Script.sol";
 import "forge-std/console2.sol";
 
-import "@solady/utils/CREATE3.sol";
-
+import "../src/C3.sol";
 import "../src/Shibuya.sol";
 import "../src/Museum.sol";
 import "../src/Collection.sol";
 
 
-contract DeployScript is Script {
+contract Core is Script {
     function run() public {
         vm.startBroadcast();
-        // testing the nonce change with create3 :)
-        // payable(vm.envAddress("TREASURY_ADDRESS")).transfer(1 ether);
+        C3 c3 = new C3();
 
-        address collectionImpl = CREATE3.deploy(
+        address collectionImpl = c3.deploy(
             keccak256(abi.encodePacked(
                 msg.sender,
                 "COLLECTION_V0.0.1"
             )),
-            abi.encodePacked(
-                vm.getCode("Collection.sol"),
-                ""
-            ),
-            0
+            vm.getCode("Collection.sol")
         );
 
-        address museumImpl = CREATE3.deploy(
+        address museumImpl = c3.deploy(
             keccak256(abi.encodePacked(
                 msg.sender,
                 "MUSEUM_V0.0.1"
             )),
-            abi.encodePacked(
-                vm.getCode("Museum.sol"),
-                ""
-            ),
-            0
+            vm.getCode("Museum.sol")
         );
 
-        address shibuya = CREATE3.deploy(
+        address shibuya = c3.deploy(
             keccak256(abi.encodePacked(
                 msg.sender,
                 "SHIBUYA_V0.0.1"
@@ -54,8 +44,7 @@ contract DeployScript is Script {
                     museumImpl,
                     collectionImpl
                 )
-            ),
-            0
+            )
         );
 
         console2.log("Collection Implementation: %s", collectionImpl);
@@ -65,32 +54,34 @@ contract DeployScript is Script {
     }
 }
 
-contract FlightCheckScript is Script {
+contract PrimaryArrangement is Script {
     function run() public {
         vm.startBroadcast();
-        address collectionImpl = address(new Collection());
-        console2.log("Collection Implementation: %s", collectionImpl);
+        Shibuya shibuya = Shibuya(vm.envAddress("SHIBUYA_ADDRESS"));
+        Museum museum = Museum(shibuya.createMuseum("Origami Primary Arrangement Museum"));
+        Collection btcusd = Collection(museum.createCollection("BTC-USD", 8, 1, "(int256)", true));
+        Collection ethusd = Collection(museum.createCollection("ETH-USD", 8, 1, "(int256)", true));
+        Collection ethbtc = Collection(museum.createCollection("ETH-BTC", 8, 1, "(int256)", true));
+        int256 btcusdPrice = 2509757000000;
+        int256 ethusdPrice = 154270000000;
+        int256 ethbtcPrice = 6144500;
+        btcusd.curate(1, abi.encode(btcusdPrice));
+        ethusd.curate(1, abi.encode(ethusdPrice));
+        ethbtc.curate(1, abi.encode(ethbtcPrice));
+
+        console2.log("Origami Primary Arrangement Museum: %s", address(museum));
+        console2.log("BTC-USD: %s", address(btcusd));
+        console2.log("ETH-USD: %s", address(ethusd));
+        console2.log("ETH-BTC: %s", address(ethbtc));
         vm.stopBroadcast();
     }
 }
 
-contract FlightCheckAdvancedScript is Script {
+contract Decode is Script {
     function run() public {
-        vm.startBroadcast();
-//        address collectionImpl = CREATE3.deploy(
-//            keccak256(abi.encodePacked(
-//                msg.sender,
-//                "COLLECTION_FLIGHT_CHECK_ADVANCED"
-//            )),
-//            abi.encodePacked(
-//                vm.getCode("Collection.sol"),
-//                ""
-//            ),
-//            0
-//        );
-        address collectionImpl = deployCode("Collection.sol", "");
-//        address collectionImpl = CREATE3.deploy(keccak256("test"), abi.encodePacked(vm.getCode("Collection.sol")), 0);
-        console2.log("Collection Implementation: %s", collectionImpl);
-        vm.stopBroadcast();
+        int256 btcusdPrice = 2509757000000;
+        bytes memory ep = abi.encode(btcusdPrice);
+        (int256 price) = abi.decode(ep, (int256));
+        console2.log("Price: %s", price);
     }
 }
