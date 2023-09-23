@@ -12,7 +12,7 @@ contract VisitorIntegrationExample {
     }
 
     function _btcPrice() private view returns (uint256) {
-        (bytes _origami, uint256 _timestamp) = IVisitor(collection).visit();
+        (bytes memory _origami, uint256 _timestamp) = IVisitor(collection).visit();
 
         /// @dev Example of decoding uint256
         /// @dev Decode Origami based on collection type (RTM)
