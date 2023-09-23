@@ -2,8 +2,8 @@
 // based on https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.9.3/contracts/proxy/beacon/UpgradeableBeacon.sol
 pragma solidity ^0.8.21;
 
-import "openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol";
-import "openzeppelin-contracts/contracts/utils/Address.sol";
+import "@zeppelin/proxy/beacon/IBeacon.sol";
+import "@zeppelin/utils/Address.sol";
 import "./bls/BLSOwnableUpgradeable.sol";
 
 contract UpgradeableBeaconBLS is IBeacon, BLSOwnableUpgradeable {

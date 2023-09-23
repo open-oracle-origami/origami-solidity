@@ -5,8 +5,8 @@ pragma solidity ^0.8.21;
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-import "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import "openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol";
+import "@zeppelin/proxy/ERC1967/ERC1967Proxy.sol";
+import "@zeppelin/proxy/beacon/UpgradeableBeacon.sol";
 
 import "../../src/V1AlphaHeavy/ShibuyaImplV1.sol";
 import "../../src/V1AlphaHeavy/MuseumImplV1.sol";

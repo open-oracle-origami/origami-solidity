@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-import "openzeppelin-contracts/contracts/proxy/beacon/BeaconProxy.sol";
-import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
-import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
+import "@zeppelin/proxy/beacon/BeaconProxy.sol";
+import "@upgradeable/proxy/utils/Initializable.sol";
+import "@upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 
 abstract contract ShibuyaV1 is Initializable, UUPSUpgradeable {

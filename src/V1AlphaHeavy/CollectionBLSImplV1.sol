@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
+import "@upgradeable/proxy/utils/Initializable.sol";
 import "./IVisitable.sol";
 import "./CollectionV1.sol";
 import "./bls/BLSOwnableUpgradeable.sol";
@@ -76,4 +76,3 @@ contract CollectionBLSImplV1 is Initializable, BLSOwnableUpgradeable, Collection
         return address(0);
     } 
 }
-
